@@ -1369,6 +1369,43 @@ NOTE: At any point in time through this workflow you should feel free to ask the
       userMessage.parts.push(part)
       return input.messages
     }
+
+    // Entering RLM mode
+    if (input.agent.name === "rlm" && assistantMessage?.info.agent !== "rlm") {
+      const part = await Session.updatePart({
+        id: Identifier.ascending("part"),
+        messageID: userMessage.info.id,
+        sessionID: userMessage.info.sessionID,
+        type: "text",
+        text: `<system-reminder>
+RLM mode is active. You manage context programmatically through the REPL tool.
+
+Your first action should be to use the REPL tool to load and explore context. Use loadSession() to load this session's conversation history into the persistent store, then work through it programmatically.
+
+Remember: only print() output enters your token window. Keep it concise.
+</system-reminder>`,
+        synthetic: true,
+      })
+      userMessage.parts.push(part)
+      return input.messages
+    }
+
+    // Switching from RLM mode to another agent
+    if (input.agent.name !== "rlm" && assistantMessage?.info.agent === "rlm") {
+      const part = await Session.updatePart({
+        id: Identifier.ascending("part"),
+        messageID: userMessage.info.id,
+        sessionID: userMessage.info.sessionID,
+        type: "text",
+        text: `<system-reminder>
+You have switched from RLM mode. The RLM agent's analysis and findings from the REPL are in the conversation above. Use those results to continue the task.
+</system-reminder>`,
+        synthetic: true,
+      })
+      userMessage.parts.push(part)
+      return input.messages
+    }
+
     return input.messages
   }
 

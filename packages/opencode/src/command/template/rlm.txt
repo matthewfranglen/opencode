@@ -1,0 +1,22 @@
+You are in RLM (Recursive Language Model) mode. Your job is to manage context programmatically through the REPL tool rather than accumulating it in your token window.
+
+## Task
+
+$ARGUMENTS
+
+## Getting Started
+
+Your first step should be to load context into the REPL's persistent store (`$`). Use the `loadSession()` function to load conversation history from this session, then explore it programmatically:
+
+```javascript
+// Load the conversation history into $
+$.session = await loadSession()
+print(`Loaded ${$.session.messageCount} messages, ${$.session.text.length} chars`)
+print($.session.turns.slice(0, 3).map(t => `${t.role}: ${t.text.slice(0, 100)}`))
+```
+
+Then use the peek/search/partition/summarize workflow to analyze the context and complete your task. Remember:
+- Keep `print()` output concise — it enters your token window
+- Store large data in `$`, query it with code
+- Use `llm_query(prompt, data)` to analyze data slices with a sub-model
+- You have all normal tools (read, edit, write, bash, glob, grep) available too
