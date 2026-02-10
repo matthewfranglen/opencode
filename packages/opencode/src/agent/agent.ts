@@ -13,6 +13,7 @@ import PROMPT_COMPACTION from "./prompt/compaction.txt"
 import PROMPT_EXPLORE from "./prompt/explore.txt"
 import PROMPT_SUMMARY from "./prompt/summary.txt"
 import PROMPT_TITLE from "./prompt/title.txt"
+import PROMPT_RLM from "./prompt/rlm.txt"
 import { PermissionNext } from "@/permission/next"
 import { mergeDeep, pipe, sortBy, values } from "remeda"
 import { Global } from "@/global"
@@ -109,6 +110,23 @@ export namespace Agent {
           }),
           user,
         ),
+        mode: "primary",
+        native: true,
+      },
+      rlm: {
+        name: "rlm",
+        description: "RLM mode: manages large context via a persistent REPL to avoid context rot. Uses code to selectively query and analyze data.",
+        prompt: PROMPT_RLM,
+        permission: PermissionNext.merge(
+          defaults,
+          PermissionNext.fromConfig({
+            question: "allow",
+            repl: "allow",
+          }),
+          user,
+        ),
+        options: {},
+        steps: 30,
         mode: "primary",
         native: true,
       },

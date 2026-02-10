@@ -1,0 +1,40 @@
+Execute JavaScript code in a persistent REPL environment. The `$` object persists across calls — use `$.varName = value` to store data that survives between invocations.
+
+Use this tool to programmatically explore and analyze context. Only the output of console.log() / print() calls enters the conversation — keep output concise and targeted.
+
+Built-in variables and functions:
+
+- `$` — Persistent store object. Assign properties to save state: `$.data = loadedContent`. Access in later calls: `$.data`.
+- `await llm_query(prompt, context, options?)` — Send a sub-query to an LLM. The `prompt` is your question, `context` is the text to analyze. Returns a string response. Options: `{ model?: "provider/model" }`. Defaults to the configured small model.
+- `print(...)` — Alias for console.log(). Output is captured and returned.
+- `directory` — The current project working directory.
+
+Patterns for effective use:
+
+1. **Peek**: Load data into `$`, print a small slice to understand structure.
+   ```
+   $.files = await (await import("fs")).promises.readdir(directory)
+   print($.files.slice(0, 10))
+   ```
+2. **Search**: Use string methods to filter stored data.
+   ```
+   print($.data.filter(line => line.includes("error")))
+   ```
+3. **Partition + Map**: Split large data into chunks, use llm_query() on each.
+   ```
+   $.results = []
+   for (const chunk of $.chunks) {
+     $.results.push(await llm_query("Summarize this", chunk))
+   }
+   print($.results)
+   ```
+4. **Summarize**: Aggregate sub-query results.
+   ```
+   const summary = await llm_query("Combine these summaries", $.results.join("\n\n"))
+   print(summary)
+   ```
+
+Tips:
+- Store large data in `$`, then selectively print only what you need.
+- Each call supports top-level await.
+- Use `await import("fs")` or `await import("path")` for Node.js/Bun APIs.
