@@ -5,8 +5,10 @@ Use this tool to programmatically explore and analyze context. Only the output o
 Built-in variables and functions:
 
 - `$` — Persistent store object. Assign properties to save state: `$.data = loadedContent`. Access in later calls: `$.data`.
+- `$.budget` — Auto-injected budget info: `{ total, used, remaining }`. Check `$.budget.remaining` to pace yourself.
 - `await llm_query(prompt, context, options?)` — Send a sub-query to an LLM. The `prompt` is your question, `context` is the text to analyze. Returns a string response. Options: `{ model?: "provider/model" }`. Defaults to the configured small model.
 - `await loadSession(sessionID?)` — Load session conversation history. Returns `{ turns, text, messageCount }`. `turns` is an array of `{ role, agent, text, tools }` objects. `text` is a plain-text summary. If no sessionID is given, loads the current session.
+- `await loadFiles(pattern, options?)` — Load files matching a glob pattern. Returns `Record<path, content>`. Options: `{ cwd?: string }`. Defaults to project directory.
 - `print(...)` — Alias for console.log(). Output is captured and returned.
 - `directory` — The current project working directory.
 

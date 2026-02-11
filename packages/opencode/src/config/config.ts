@@ -641,6 +641,7 @@ export namespace Config {
           lsp: PermissionRule.optional(),
           doom_loop: PermissionAction.optional(),
           skill: PermissionRule.optional(),
+          repl: PermissionRule.optional(),
         })
         .catchall(PermissionRule)
         .or(PermissionAction),

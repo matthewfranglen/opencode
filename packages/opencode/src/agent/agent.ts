@@ -115,7 +115,8 @@ export namespace Agent {
       },
       rlm: {
         name: "rlm",
-        description: "RLM mode: manages large context via a persistent REPL to avoid context rot. Uses code to selectively query and analyze data.",
+        description:
+          "RLM mode: manages large context via a persistent REPL to avoid context rot. Uses code to selectively query and analyze data.",
         prompt: PROMPT_RLM,
         permission: PermissionNext.merge(
           defaults,
@@ -126,7 +127,7 @@ export namespace Agent {
           user,
         ),
         options: {},
-        steps: 30,
+        steps: 5,
         mode: "primary",
         native: true,
       },
